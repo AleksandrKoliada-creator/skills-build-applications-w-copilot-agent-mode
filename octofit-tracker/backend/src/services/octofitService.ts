@@ -14,7 +14,7 @@ function normalizeFocus(value: string | undefined) {
 }
 
 export async function listActivities() {
-  return Activity.find().sort({ occurredAt: -1, _id: -1 }).lean();
+  return Activity.find().sort({ occurredAt:-1, _id: -1 }).lean();
 }
 
 export async function createActivity(input: unknown) {
@@ -133,6 +133,7 @@ export async function suggestWorkouts(userEmail: string) {
   const recentFocus = recentActivities
     .map((activity) => normalizeFocus(String(activity.type)))
     .find(Boolean) ?? '';
+  // A stated fitness goal takes precedence; recent activity is a secondary signal.
   const preferredFocus = normalizeFocus(String(user.fitnessGoal)) || recentFocus;
 
   const workouts = await Workout.find().sort({ title: 1 }).lean();

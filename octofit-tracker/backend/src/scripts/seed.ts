@@ -12,6 +12,7 @@ async function upsertDemoUser(name: string, email: string, teamId: InstanceType<
     { $set: { name, email, team: teamId, fitnessGoal } },
     { upsert: true, new: true, setDefaultsOnInsert: true },
   );
+  
   await Team.updateOne({ _id: teamId }, { $addToSet: { members: user._id } });
   return user;
 }
