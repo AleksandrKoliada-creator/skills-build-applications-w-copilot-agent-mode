@@ -12,6 +12,7 @@ describe('OctoFit data contract', () => {
     expect(error?.errors.email).toBeDefined();
     expect(error?.errors.fitnessGoal).toBeDefined();
   });
+  
   it('requires teams to have a name, mascot, and members array', () => {
     const team = new Team({ name: 'Octocats', mascot: 'Mona', members: [] });
     expect(team.validateSync()).toBeUndefined();
