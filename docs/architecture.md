@@ -1,6 +1,6 @@
 # OctoFit Tracker architecture
 
-OctoFit Tracker is a three-tier application for a school fitness program. The starter code includes API contracts and intentionally incomplete implementation points so you can use GitHub Copilot agent mode in a test-driven loop.
+OctoFit Tracker is a three-tier application for a school fitness program. The starter code includes API contracts and intentionally incomplete implementation points so you can use GitHub Copilot agent mode in a test-driven loop
 
 ![Three-tier OctoFit architecture](../.github/images/octofit-architecture.svg)
 
