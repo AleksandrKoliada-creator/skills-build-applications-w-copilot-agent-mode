@@ -78,13 +78,13 @@ describe('OctoFit API contract', () => {
       { teamName: 'Octocats', totalPoints: 25, rank: 2 },
     ]);
   });
-  it('suggests workouts that match each user activity pattern', async () => {
+  it('prioritizes fitness goals over conflicting recent activity when suggesting workouts', async () => {
     const mona = await createUserAndTeam('Mona', 'mona@example.com', 'Mona', 'Octocats');
     const hubot = await createUserAndTeam('Hubot', 'hubot@example.com', 'Hubot', 'Robocats');
     await User.updateOne({ _id: hubot.user._id }, { $set: { fitnessGoal: 'strength' } });
     await Activity.create([
       { user: mona.user._id, team: mona.team._id, type: 'run', minutes: 40, points: 40, occurredAt: new Date() },
-      { user: hubot.user._id, team: hubot.team._id, type: 'strength', minutes: 20, points: 20, occurredAt: new Date() },
+      { user: hubot.user._id, team: hubot.team._id, type: 'run', minutes: 20, points: 20, occurredAt: new Date() },
     ]);
     await Workout.create([
       { title: 'Intervals', focus: 'endurance', minutes: 30, difficulty: 'moderate' },
@@ -98,6 +98,7 @@ describe('OctoFit API contract', () => {
     const hubotResponse = await request(app).get('/api/workouts/suggestions/hubot%40example.com');
     expect(hubotResponse.status).toBe(200);
     expect(hubotResponse.body.suggestions[0]).toMatchObject({ title: 'Strength Circuit', focus: 'strength', reason: expect.stringMatching(/strength|activity/i) });
+    expect(hubotResponse.body.suggestions[1]).toMatchObject({ title: 'Intervals', focus: 'endurance' });
 
     const unknownResponse = await request(app).get('/api/workouts/suggestions/nobody%40example.com');
     expect(unknownResponse.status).toBeGreaterThanOrEqual(400);
