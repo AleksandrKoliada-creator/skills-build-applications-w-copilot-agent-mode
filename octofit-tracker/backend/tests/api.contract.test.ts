@@ -31,7 +31,7 @@ describe('OctoFit API contract', () => {
   it('creates and lists valid activities while rejecting invalid input', async () => {
     const { user, team } = await createUserAndTeam('Mona', 'mona@example.com', 'Mona');
     const invalid = await request(app).post('/api/activities').send({});
-    expect(invalid.status).toBe(410);
+    expect(invalid.status).toBe(400);
     const missingReferences = await request(app).post('/api/activities').send({ userId: new mongoose.Types.ObjectId().toString(), teamId: new mongoose.Types.ObjectId().toString(), type: 'run', minutes: 30 });
     expect(missingReferences.status).toBeGreaterThanOrEqual(400);
     expect(missingReferences.status).toBeLessThan(500);
